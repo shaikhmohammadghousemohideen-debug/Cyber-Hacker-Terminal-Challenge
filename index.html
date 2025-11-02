@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Hacker: Terminal Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #003300 0%, #006600 100%);
+            padding: 20px;
+            border-bottom: 2px solid #00ff00;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            text-shadow: 0 0 10px #00ff00;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px #00ff00; }
+            50% { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: rgba(0, 50, 0, 0.3);
+            border-bottom: 1px solid #00ff00;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #00cc00;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        .terminal {
+            padding: 20px;
+            min-height: 300px;
+        }
+
+        .terminal-output {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .terminal-line {
+            margin: 5px 0;
+        }
+
+        .prompt {
+            color: #00ff00;
+        }
+
+        .error {
+            color: #ff0000;
+        }
+
+        .success {
+            color: #00ffff;
+        }
+
+        .warning {
+            color: #ffff00;
+        }
+
+        .input-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            background: rgba(0, 50, 0, 0.5);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-area input::placeholder {
+            color: #006600;
+        }
+
+        .input-area button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .input-area button:hover {
+            background: #00cc00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        .challenge {
+            background: rgba(0, 100, 0, 0.2);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .progress-bar {
+            background: rgba(0, 50, 0, 0.5);
+            height: 20px;
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00 0%, #00cc00 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .blink {
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .hint {
+            color: #ffff00;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .victory-button {
+            display: inline-block;
+            background: #000;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            padding: 15px 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+            text-shadow: 0 0 10px #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .victory-button:hover {
+            background: #003300;
+            text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ CYBER HACKER: TERMINAL CHALLENGE ⚡</h1>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-label">LEVEL</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">SCORE</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">SYSTEMS HACKED</div>
+                <div class="stat-value" id="hacked">0</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress" style="width: 0%">0%</div>
+        </div>
+
+        <div class="terminal">
+            <div class="terminal-output" id="output"></div>
+            <div class="input-area">
+                <span class="prompt">root@hacker:~$</span>
+                <input type="text" id="commandInput" placeholder="Enter command..." autofocus>
+                <button onclick="executeCommand()">EXECUTE</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const challenges = [
+            {
+                level: 1,
+                intro: "MISSION: Access the corporate database\nFIND: The admin password hash\nCOMMAND: Use 'scan' to detect vulnerabilities",
+                answer: "scan",
+                hint: "Try scanning the system first...",
+                success: "Vulnerability detected! SQL injection point found."
+            },
+            {
+                level: 2,
+                intro: "SQL injection detected at login portal\nEXPLOIT: Bypass authentication\nCOMMAND: Type 'inject' to exploit the vulnerability",
+                answer: "inject",
+                hint: "You need to inject malicious code...",
+                success: "Access granted! Database credentials obtained."
+            },
+            {
+                level: 3,
+                intro: "ENCRYPTED FILE FOUND: secure_data.enc\nDECRYPT: Use password 'cyb3r2025'\nCOMMAND: Type 'decrypt cyb3r2025' to unlock",
+                answer: "decrypt cyb3r2025",
+                hint: "Use 'decrypt' followed by the password...",
+                success: "Decryption successful! Secret files revealed."
+            },
+            {
+                level: 4,
+                intro: "FIREWALL DETECTED: Port 8080 blocked\nBYPASS: Tunnel through port 443\nCOMMAND: Type 'tunnel 443' to create secure connection",
+                answer: "tunnel 443",
+                hint: "Create a tunnel through the specified port...",
+                success: "Tunnel established! Firewall bypassed."
+            },
+            {
+                level: 5,
+                intro: "ROOT ACCESS REQUIRED\nEXPLOIT: Buffer overflow vulnerability found\nCOMMAND: Type 'exploit buffer' to gain root",
+                answer: "exploit buffer",
+                hint: "Exploit the buffer overflow...",
+                success: "ROOT ACCESS GRANTED! System fully compromised!"
+            }
+        ];
+
+        let currentLevel = 0;
+        let score = 0;
+        let systemsHacked = 0;
+
+        function addOutput(text, className = '') {
+            const output = document.getElementById('output');
+            const line = document.createElement('div');
+            line.className = `terminal-line ${className}`;
+            line.innerHTML = text;
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = '';
+        }
+
+        function updateStats() {
+            document.getElementById('level').textContent = currentLevel + 1;
+            document.getElementById('score').textContent = score;
+            document.getElementById('hacked').textContent = systemsHacked;
+            const progress = ((currentLevel + 1) / challenges.length) * 100;
+            const progressBar = document.getElementById('progress');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = Math.round(progress) + '%';
+        }
+
+        function startChallenge() {
+            if (currentLevel >= challenges.length) {
+                addOutput('<br>='.repeat(40), 'success');
+                addOutput('🎉 CONGRATULATIONS! ALL SYSTEMS HACKED! 🎉', 'success');
+                addOutput('You are now a MASTER HACKER!', 'success');
+                addOutput('Final Score: ' + score, 'success');
+                addOutput('='.repeat(40), 'success');
+                showVictoryButton();
+                return;
+            }
+
+            const challenge = challenges[currentLevel];
+            addOutput('<br>' + '='.repeat(40), 'warning');
+            addOutput(`LEVEL ${currentLevel + 1}: INITIATING...`, 'warning');
+            addOutput('='.repeat(40), 'warning');
+            addOutput('<br>' + challenge.intro, 'prompt');
+            addOutput('<br>Type "help" for assistance or "hint" for a clue', 'hint');
+        }
+
+        function showVictoryButton() {
+            const output = document.getElementById('output');
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'button-container';
+            
+            const message = document.createElement('div');
+            message.className = 'terminal-line success';
+            message.style.marginTop = '20px';
+            message.innerHTML = 'Well done! You won the game!<br>Do you want to learn about complete hacking?';
+            
+            const button = document.createElement('button');
+            button.className = 'victory-button';
+            button.textContent = 'YES, TEACH ME HACKING';
+            button.onclick = function() {
+                // Replace this URL with your actual website link
+                window.open('https://your-website-link.com', '_blank');
+            };
+            
+            buttonContainer.appendChild(message);
+            buttonContainer.appendChild(button);
+            output.appendChild(buttonContainer);
+        }
+
+        function executeCommand() {
+            const input = document.getElementById('commandInput');
+            const cmd = input.value.trim().toLowerCase();
+            
+            if (!cmd) return;
+
+            addOutput(`<br><span class="prompt">root@hacker:~$</span> ${input.value}`);
+            input.value = '';
+
+            if (cmd === 'help') {
+                addOutput('<br>Available commands:', 'success');
+                addOutput('  help  - Show this help message', 'success');
+                addOutput('  hint  - Get a hint for current challenge', 'success');
+                addOutput('  clear - Clear terminal output', 'success');
+                return;
+            }
+
+            if (cmd === 'clear') {
+                clearOutput();
+                startChallenge();
+                return;
+            }
+
+            if (cmd === 'hint') {
+                addOutput(challenges[currentLevel].hint, 'hint');
+                return;
+            }
+
+            const challenge = challenges[currentLevel];
+            if (cmd === challenge.answer) {
+                score += 100 * (currentLevel + 1);
+                systemsHacked++;
+                addOutput('<br>' + challenge.success, 'success');
+                addOutput(`+${100 * (currentLevel + 1)} POINTS!`, 'success');
+                
+                currentLevel++;
+                updateStats();
+                
+                setTimeout(() => {
+                    startChallenge();
+                }, 2000);
+            } else {
+                addOutput('ERROR: Invalid command or incorrect syntax', 'error');
+                addOutput('Type "hint" if you need help', 'warning');
+            }
+        }
+
+        document.getElementById('commandInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                executeCommand();
+            }
+        });
+
+        // Initialize game
+        addOutput('INITIALIZING HACKER TERMINAL...', 'success');
+        addOutput('CONNECTION ESTABLISHED', 'success');
+        addOutput('NEURAL INTERFACE: ONLINE', 'success');
+        addOutput('<br>Welcome, Agent. Your mission is to hack into 5 secured systems.', 'prompt');
+        addOutput('Each system requires different hacking techniques.', 'prompt');
+        updateStats();
+        startChallenge();
+    </script>
+</body>
+</html>
